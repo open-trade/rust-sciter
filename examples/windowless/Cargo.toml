@@ -6,10 +6,12 @@ authors = ["pravic <ehysta@gmail.com>"]
 edition = "2018"
 publish = false
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[[bin]]
+name = "windowless"
+path = "src/windowless.rs"
 
 [dependencies]
-sciter-rs = { version = "0.5", path="../../", features = ["windowless"] }
+sciter-rs = { version = "0.5", path="../../", features = ["windowless", "dynamic"] }
 
 winit = "0.24"
 winapi = { version = "0.3", features = [

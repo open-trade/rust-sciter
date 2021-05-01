@@ -97,9 +97,5 @@ name = "clock"
 path = "examples/clock.rs"
 
 [[example]]
-name = "windowless"
-path = "examples/windowless.rs"
-
-[[example]]
 name = "som"
 path = "examples/som.rs"
