@@ -1,0 +1,21 @@
+[package]
+name = "windowless"
+version = "0.1.0"
+description = "Sciter.Lite windowless example"
+authors = ["pravic <ehysta@gmail.com>"]
+edition = "2018"
+publish = false
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+sciter-rs = { version = "0.5", path="../../", features = ["windowless"] }
+
+winit = "0.24"
+winapi = { version = "0.3", features = [
+  "impl-default",
+  "winuser",
+  "wingdi",
+  "sysinfoapi",
+] }
+raw-window-handle = "0.3"
