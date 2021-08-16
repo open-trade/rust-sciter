@@ -103,16 +103,16 @@ impl NamedInterface for fragmented_video_destination {
 #[repr(C)]
 struct iasset_vtbl {
 	/// Increments the reference count for an interface on an object.
-	pub add_ref: extern "C" fn(this: *mut iasset) -> i32,
+	pub add_ref: extern "thiscall" fn(this: *mut iasset) -> i32,
 
 	/// Decrements the reference count for an interface on an object.
-	pub release: extern "C" fn(this: *mut iasset) -> i32,
+	pub release: extern "thiscall" fn(this: *mut iasset) -> i32,
 
 	/// Retrieves pointers to the supported interfaces on an object.
-	pub get_interface: extern "C" fn(this: *mut iasset, name: LPCSTR, out: *mut *mut iasset) -> bool,
+	pub get_interface: extern "thiscall" fn(this: *mut iasset, name: LPCSTR, out: *mut *mut iasset) -> bool,
 
 	/// Retrieves a pointer to the passport declaration of an object.
-	pub get_passport: extern "C" fn(thing: *mut iasset) -> *const som_passport_t,
+	pub get_passport: extern "thiscall" fn(thing: *mut iasset) -> *const som_passport_t,
 }
 
 /// COM `IUnknown` alike thing.
@@ -144,35 +144,35 @@ impl iasset {
 struct video_source_vtbl {
 	// region: iasset
 	/// Increments the reference count for an interface on an object.
-	pub add_ref: extern "C" fn(this: *mut video_source) -> i32,
+	pub add_ref: extern "thiscall" fn(this: *mut video_source) -> i32,
 
 	/// Decrements the reference count for an interface on an object.
-	pub release: extern "C" fn(this: *mut video_source) -> i32,
+	pub release: extern "thiscall" fn(this: *mut video_source) -> i32,
 
 	/// Retrieves pointers to the supported interfaces on an object.
-	pub get_interface: extern "C" fn(this: *mut video_source, name: *const u8, out: *mut *mut iasset) -> bool,
+	pub get_interface: extern "thiscall" fn(this: *mut video_source, name: *const u8, out: *mut *mut iasset) -> bool,
 
 	/// Retrieves a pointer to the passport declaration of an object.
-	pub get_passport: extern "C" fn(thing: *mut iasset) -> *const som_passport_t,
+	pub get_passport: extern "thiscall" fn(thing: *mut iasset) -> *const som_passport_t,
 	// endregion
 
 	// region: video_source
-	pub play: extern "C" fn(this: *mut video_source) -> bool,
-	pub pause: extern "C" fn(this: *mut video_source) -> bool,
-	pub stop: extern "C" fn(this: *mut video_source) -> bool,
+	pub play: extern "thiscall" fn(this: *mut video_source) -> bool,
+	pub pause: extern "thiscall" fn(this: *mut video_source) -> bool,
+	pub stop: extern "thiscall" fn(this: *mut video_source) -> bool,
 
-	pub get_is_ended: extern "C" fn(this: *const video_source, is_end: *mut bool) -> bool,
+	pub get_is_ended: extern "thiscall" fn(this: *const video_source, is_end: *mut bool) -> bool,
 
-	pub get_position: extern "C" fn(this: *const video_source, seconds: *mut f64) -> bool,
-	pub set_position: extern "C" fn(this: *mut video_source, seconds: f64) -> bool,
+	pub get_position: extern "thiscall" fn(this: *const video_source, seconds: *mut f64) -> bool,
+	pub set_position: extern "thiscall" fn(this: *mut video_source, seconds: f64) -> bool,
 
-	pub get_duration: extern "C" fn(this: *const video_source, seconds: *mut f64) -> bool,
+	pub get_duration: extern "thiscall" fn(this: *const video_source, seconds: *mut f64) -> bool,
 
-	pub get_volume: extern "C" fn(this: *const video_source, volume: *mut f64) -> bool,
-	pub set_volume: extern "C" fn(this: *mut video_source, volume: f64) -> bool,
+	pub get_volume: extern "thiscall" fn(this: *const video_source, volume: *mut f64) -> bool,
+	pub set_volume: extern "thiscall" fn(this: *mut video_source, volume: f64) -> bool,
 
-	pub get_balance: extern "C" fn(this: *const video_source, balance: *mut f64) -> bool,
-	pub set_balance: extern "C" fn(this: *mut video_source, balance: f64) -> bool,
+	pub get_balance: extern "thiscall" fn(this: *const video_source, balance: *mut f64) -> bool,
+	pub set_balance: extern "thiscall" fn(this: *mut video_source, balance: f64) -> bool,
 	// endregion
 }
 
@@ -254,33 +254,33 @@ impl video_source {
 struct video_destination_vtbl {
 	// region: iasset:
 	/// Increments the reference count for an interface on an object.
-	pub add_ref: extern "C" fn(this: *mut video_destination) -> i32,
+	pub add_ref: extern "thiscall" fn(this: *mut video_destination) -> i32,
 
 	/// Decrements the reference count for an interface on an object.
-	pub release: extern "C" fn(this: *mut video_destination) -> i32,
+	pub release: extern "thiscall" fn(this: *mut video_destination) -> i32,
 
 	/// Retrieves pointers to the supported interfaces on an object.
-	pub get_interface: extern "C" fn(this: *mut video_destination, name: *const u8, out: *mut *mut iasset) -> bool,
+	pub get_interface: extern "thiscall" fn(this: *mut video_destination, name: *const u8, out: *mut *mut iasset) -> bool,
 
 	/// Retrieves a pointer to the passport declaration of an object.
-	pub get_passport: extern "C" fn(thing: *mut iasset) -> *const som_passport_t,
+	pub get_passport: extern "thiscall" fn(thing: *mut iasset) -> *const som_passport_t,
 	// endregion
 
 	// region: video_destination
 	/// Whether this instance of `video_renderer` is attached to a DOM element and is capable of playing.
-	pub is_alive: extern "C" fn(this: *const video_destination) -> bool,
+	pub is_alive: extern "thiscall" fn(this: *const video_destination) -> bool,
 
 	/// Start streaming/rendering.
-	pub start_streaming: extern "C" fn(this: *mut video_destination, frame_width: i32, frame_height: i32, color_space: COLOR_SPACE, src: *const video_source) -> bool,
+	pub start_streaming: extern "thiscall" fn(this: *mut video_destination, frame_width: i32, frame_height: i32, color_space: COLOR_SPACE, src: *const video_source) -> bool,
 
 	/// Stop streaming.
-	pub stop_streaming: extern "C" fn(this: *mut video_destination) -> bool,
+	pub stop_streaming: extern "thiscall" fn(this: *mut video_destination) -> bool,
 
 	/// Render the next frame.
-	pub render_frame: extern "C" fn(this: *mut video_destination, data: LPCBYTE, size: UINT) -> bool,
+	pub render_frame: extern "thiscall" fn(this: *mut video_destination, data: LPCBYTE, size: UINT) -> bool,
 
 	/// Render the next frame with the given stride.
-	pub render_frame_with_stride: extern "C" fn(this: *mut video_destination, data: LPCBYTE, size: UINT, stride: UINT) -> bool,
+	pub render_frame_with_stride: extern "thiscall" fn(this: *mut video_destination, data: LPCBYTE, size: UINT, stride: UINT) -> bool,
 	// endregion
 }
 
@@ -329,38 +329,38 @@ impl video_destination {
 struct fragmented_video_destination_vtbl {
 	// region: iasset:
 	/// Increments the reference count for an interface on an object.
-	pub add_ref: extern "C" fn(this: *mut fragmented_video_destination) -> i32,
+	pub add_ref: extern "thiscall" fn(this: *mut fragmented_video_destination) -> i32,
 
 	/// Decrements the reference count for an interface on an object.
-	pub release: extern "C" fn(this: *mut fragmented_video_destination) -> i32,
+	pub release: extern "thiscall" fn(this: *mut fragmented_video_destination) -> i32,
 
 	/// Retrieves pointers to the supported interfaces on an object.
-	pub get_interface: extern "C" fn(this: *mut fragmented_video_destination, name: *const u8, out: *mut *mut iasset) -> bool,
+	pub get_interface: extern "thiscall" fn(this: *mut fragmented_video_destination, name: *const u8, out: *mut *mut iasset) -> bool,
 
 	/// Retrieves a pointer to the passport declaration of an object.
-	pub get_passport: extern "C" fn(thing: *mut iasset) -> *const som_passport_t,
+	pub get_passport: extern "thiscall" fn(thing: *mut iasset) -> *const som_passport_t,
 	// endregion
 
 	// region: video_destination
 	/// Whether this instance of `video_renderer` is attached to a DOM element and is capable of playing.
-	pub is_alive: extern "C" fn(this: *const fragmented_video_destination) -> bool,
+	pub is_alive: extern "thiscall" fn(this: *const fragmented_video_destination) -> bool,
 
 	/// Start streaming/rendering.
-	pub start_streaming: extern "C" fn(this: *mut fragmented_video_destination, frame_width: i32, frame_height: i32, color_space: COLOR_SPACE, src: *const video_source) -> bool,
+	pub start_streaming: extern "thiscall" fn(this: *mut fragmented_video_destination, frame_width: i32, frame_height: i32, color_space: COLOR_SPACE, src: *const video_source) -> bool,
 
 	/// Stop streaming.
-	pub stop_streaming: extern "C" fn(this: *mut fragmented_video_destination) -> bool,
+	pub stop_streaming: extern "thiscall" fn(this: *mut fragmented_video_destination) -> bool,
 
 	/// Render the next frame.
-	pub render_frame: extern "C" fn(this: *mut fragmented_video_destination, data: LPCBYTE, size: UINT) -> bool,
+	pub render_frame: extern "thiscall" fn(this: *mut fragmented_video_destination, data: LPCBYTE, size: UINT) -> bool,
 
 	/// Render the next frame with the given stride.
-	pub render_frame_with_stride: extern "C" fn(this: *mut fragmented_video_destination, data: LPCBYTE, size: UINT, stride: UINT) -> bool,
+	pub render_frame_with_stride: extern "thiscall" fn(this: *mut fragmented_video_destination, data: LPCBYTE, size: UINT, stride: UINT) -> bool,
 	// endregion
 
 	// region: fragmented_video_destination
 	/// Render the specified part of the current frame.
-	pub render_frame_part: extern "C" fn(this: *mut fragmented_video_destination, data: LPCBYTE, size: UINT, x: i32, y: i32, width: i32, height: i32) -> bool,
+	pub render_frame_part: extern "thiscall" fn(this: *mut fragmented_video_destination, data: LPCBYTE, size: UINT, x: i32, y: i32, width: i32, height: i32) -> bool,
 	// endregion
 }
 

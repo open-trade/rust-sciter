@@ -53,6 +53,7 @@ folder for more complex usage and module-level sections for the guides about:
 * Sciter [Value](value/index.html) interface.
 
 */
+#![feature(abi_thiscall)]
 
 #![doc(html_logo_url = "https://sciter.com/screenshots/slide-sciter-osx.png",
        html_favicon_url = "https://sciter.com/wp-content/themes/sciter/!images/favicon.ico")]
