@@ -29,6 +29,7 @@ and [DirectX UI integration](https://github.com/pravic/rust-gfx-sciter) via [Rus
 Physically Sciter is a mono library which contains:
 
 * [HTML and CSS](https://sciter.com/developers/for-web-programmers/) rendering engine based on the H-SMILE core used in [HTMLayout](https://terrainformatica.com/a-homepage-section/htmlayout/),
+* JavaScript in [Sciter.JS](https://sciter.com/sciter-js-is-the-mainstream-primary-version-of-sciter/),
 * JavaScript alike [Scripting engine](https://sciter.com/developers/sciter-docs/) – core of [TIScript](https://sciter.com/developers/for-web-programmers/tiscript-vs-javascript/) which by itself is based on [c-smile](https://c-smile.sourceforge.net/) engine,
 * Persistent [Database](https://sciter.com/docs/content/script/Storage.htm) (a.k.a. [JSON DB](https://terrainformatica.com/2006/10/what-the-hell-is-that-json-db/)) based on excellent DB products of [Konstantin Knizhnik](http://garret.ru/databases.html).
 * [Graphics](https://sciter.com/docs/content/sciter/Graphics.htm) module that uses native graphics primitives provided by supported platforms: Direct2D on Windows 7 and above, GDI+ on Windows XP, CoreGraphics on MacOS, Cairo on Linux/GTK. Yet there is an option to use built-in [Skia/OpenGL](https://skia.org/) backend on each platform.
@@ -63,7 +64,7 @@ Check <https://sciter.com> website and its [documentation resources](https://sci
 
 ## Getting started:
 
-1. Download the [Sciter SDK](https://sciter.com/download/) and extract it somewhere.
+1. Download the [Sciter.TIS or Sciter.JS SDK](https://sciter.com/download/) and extract it somewhere.
 2. Add the corresponding target platform binaries to PATH (`bin.win`, `bin.osx` or `bin.lnx`).
 3. If you do not already have it installed, you need GTK 3 development tools installed to continue:
     sudo apt-get install libgtk-3-dev

@@ -1,0 +1,102 @@
+name: TIScript
+
+on:
+  push:
+    branches:
+    - master
+    - travis
+
+  pull_request:
+    branches:
+    - master
+
+# Look:
+# https://github.com/actions/starter-workflows/blob/master/ci/rust.yml
+#
+# Simple, right? Right.
+# But we need to:
+# * download a specific Sciter library matching the running OS
+# * figure out where to save it
+# * add it to the $PATH
+#
+# yet,
+# * in case of macOS realize that it doesn't have Rust installed, so
+# * install it manually and don't forget to add cargo and rustc to the $PATH on each step
+# * and in case of Linux install additional packages for GTK3
+#
+# So, now we're ended up with this ugly script.
+
+jobs:
+  build:
+    name: Build and test
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Windows deps
+      if: runner.os == 'Windows'
+      # Windows: download sciter library
+      run: curl -sSLo "%SCITER_DEPS%/sciter.dll" "https://raw.githubusercontent.com/c-smile/sciter-sdk/master/bin.win/x64/sciter.dll"
+      shell: cmd
+      env:
+        SCITER_DEPS: ${{ runner.workspace }}
+
+    - name: Linux deps
+      if: runner.os == 'Linux'
+      # Linux: download sciter library && install libgtk-3-dev
+      run: |
+        curl -so "$SCITER_DEPS/libsciter-gtk.so" "https://raw.githubusercontent.com/c-smile/sciter-sdk/master/bin.lnx/x64/libsciter-gtk.so"
+        sudo apt-get update -y && sudo apt-get install libgtk-3-dev libgtk-3-0 -y
+      env:
+        SCITER_DEPS: ${{ runner.workspace }}
+
+    - name: macOS deps
+      if: runner.os == 'macOS'
+      # OSX: download sciter library
+      run: |
+        curl -so "$SCITER_DEPS/libsciter.dylib" "https://raw.githubusercontent.com/c-smile/sciter-sdk/master/bin.osx/libsciter.dylib"
+      env:
+        SCITER_DEPS: ${{ runner.workspace }}
+
+    - name: Build
+      shell: bash
+      run: |
+        cargo build --all
+        cargo build --examples
+
+    - name: serde
+      shell: bash
+      continue-on-error: true
+      run: |
+        export PATH="$PATH:$SCITER_DEPS"
+        cargo build -p sciter-serde
+        cargo test -p sciter-serde
+      env:
+        SCITER_DEPS: ${{ runner.workspace }}
+
+    - name: windowless
+      shell: bash
+      continue-on-error: true
+      run: |
+        cargo build -p windowless
+
+    - name: extension
+      shell: bash
+      continue-on-error: true
+      run: |
+        cargo build -p extension
+
+    - name: Tests
+      shell: bash
+      run: |
+        export PATH="$PATH:$SCITER_DEPS"
+        cargo run --example first
+        cargo test -p sciter-rs
+      env:
+        SCITER_DEPS: ${{ runner.workspace }}

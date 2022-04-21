@@ -179,6 +179,7 @@ pub struct Value
 
 /// `sciter::Value` can be transferred across thread boundaries.
 unsafe impl Send for Value {}
+unsafe impl Sync for Value {}
 
 impl Value {
 
@@ -511,10 +512,7 @@ impl Value {
 
 	/// Value to byte vector for `T_BYTES` type.
 	pub fn to_bytes(&self) -> Option<Vec<u8>> {
-		match self.as_bytes() {
-			Some(r) => Some(r.to_owned()),
-			None => None,
-		}
+		self.as_bytes().map(ToOwned::to_owned)
 	}
 
 	/// Function invocation for `T_OBJECT` with `UT_OBJECT_FUNCTION` value type.
@@ -683,16 +681,14 @@ impl Value {
 	/// I.e. non-reference types that do not need a destructor.
 	pub const fn is_primitive(&self) -> bool {
 		use capi::scvalue::VALUE_TYPE::*;
-		match self.data.t {
-			| T_UNDEFINED
+		matches!(self.data.t,
+			T_UNDEFINED
 			| T_NULL
 			| T_BOOL
 			| T_INT
 			| T_FLOAT
 			| T_DATE
-			=> true,
-			_ => false,
-		}
+		)
 	}
 
   // script types:
