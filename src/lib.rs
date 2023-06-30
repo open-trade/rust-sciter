@@ -139,7 +139,7 @@ mod ext {
 	//
 	#![allow(non_snake_case, non_camel_case_types)]
 	use capi::scapi::{ISciterAPI};
-	use capi::sctypes::{LPCSTR, LPCVOID, BOOL};
+	use capi::sctypes::{LPCSTR, LPCWSTR, LPCVOID, BOOL};
 
   type ApiType = *const ISciterAPI;
 	type FuncType = extern "system" fn () -> *const ISciterAPI;
@@ -149,8 +149,14 @@ mod ext {
 	extern "system"
 	{
 		fn LoadLibraryA(lpFileName: LPCSTR) -> LPCVOID;
+		fn LoadLibraryW(lpFileName: LPCWSTR) -> LPCVOID;
     fn FreeLibrary(dll: LPCVOID) -> BOOL;
 		fn GetProcAddress(hModule: LPCVOID, lpProcName: LPCSTR) -> LPCVOID;
+	}
+
+	fn wide_string(s: &str) -> Vec<u16> {
+		use std::os::windows::prelude::OsStrExt;
+		std::ffi::OsStr::new(s).encode_wide().chain(Some(0).into_iter()).collect()
 	}
 
   pub fn try_load_library(permanent: bool) -> ::std::result::Result<ApiType, String> {
@@ -158,8 +164,8 @@ mod ext {
     use std::path::Path;
 
     fn try_load(path: &Path) -> Option<LPCVOID> {
-      let path = CString::new(format!("{}", path.display())).expect("invalid library path");
-      let dll = unsafe { LoadLibraryA(path.as_ptr()) };
+      let path = wide_string(path.to_string_lossy().to_string().as_str());
+      let dll = unsafe { LoadLibraryW(path.as_ptr()) };
       if !dll.is_null() {
         Some(dll)
       } else {
