@@ -560,9 +560,11 @@ impl Value {
 		let argc = count as usize;
 		let mut argv: Vec<Value> = Vec::with_capacity(argc);
 		assert!(argc == 0 || !args.is_null());
-		let args = ::std::slice::from_raw_parts(args, argc);
-		for arg in args {
-			argv.push(Value::copy_from(arg));
+		if argc != 0 {
+			let args = ::std::slice::from_raw_parts(args, argc);
+			for arg in args {
+				argv.push(Value::copy_from(arg));
+			}
 		}
 		return argv;
 	}
